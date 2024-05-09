@@ -3,7 +3,7 @@ from lumos.generator import LumosBitmapGenerator
 
 import time
 
-NUM_LEDS = 100
+NUM_LEDS = 72
 OFFSET = 4
 
 board = Lumos()
