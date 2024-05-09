@@ -13,7 +13,9 @@ class LumosOpcode(IntEnum):
     CURRENT     = 4
     BRIGHTNESS  = 5
     PATTERN     = 6
-    COLOR       = 7
+    SET_ALL     = 7
+    SET_ONE     = 8
+    CLEAR_ALL   = 9
 
 
 class LumosPowerState(IntEnum):
@@ -96,9 +98,16 @@ class LumosInterface():
         data = struct.pack("<B", pattern)
         self.interface.controlWrite(request=LumosOpcode.PATTERN, data=data)
 
-    def set_rgb(self, red: int, green: int, blue: int):
+    def set_all(self, red: int, green: int, blue: int):
         data = struct.pack("<BBB", red, green, blue)
-        self.interface.controlWrite(request=LumosOpcode.COLOR, data=data)
+        self.interface.controlWrite(request=LumosOpcode.SET_ALL, data=data)
+
+    def set_one(self, index: int, red: int, green: int, blue: int):
+        data = struct.pack("<BBBB", index, red, green, blue)
+        self.interface.controlWrite(request=LumosOpcode.SET_ONE, data=data)
+
+    def clear_all(self):
+        self.interface.controlWrite(request=LumosOpcode.CLEAR_ALL)
 
     def send_led_stream(self, data: bytearray):
         self.interface.write(data)
@@ -118,4 +127,13 @@ class Lumos():
         self.interface.set_num_leds(num_leds)
 
     def color(self, red: int, green: int, blue: int):
-        self.interface.set_rgb(red, green, blue)
+        self.set_all(red, green, blue)
+
+    def set_all(self, red: int, green: int, blue: int):
+        self.interface.set_all(red, green, blue)
+
+    def set_one(self, index: int, red: int, green: int, blue: int):
+        self.interface.set_one(index, red, green, blue)
+
+    def clear(self):
+        self.interface.clear_all()
