@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pylumos',
-    version="0.0.1",
+    version="0.0.2",
     packages=find_packages(),
     setup_requires=['setuptools_scm'],
     license='MIT',
@@ -19,7 +19,7 @@ setup(
         ]
     },
     python_requires=">=3.8",
-    install_requires=["recom=0.0.2"],
+    install_requires=["recom==0.0.2"],
     entry_points={
         "console_scripts": [
             "lumos=lumos.__main__:main",
