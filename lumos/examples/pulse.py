@@ -1,4 +1,4 @@
-from lumos.lumos import Lumos, LumosPattern
+from lumos.lumos import Lumos
 
 import time
 
@@ -15,7 +15,7 @@ while True:
         else:
             brightness = 50 - x
         board.brightness(brightness)
-        board.pattern(LumosPattern.BLUE)
+        board.color("blue")
         time.sleep(0.02)
     increment = not increment
     

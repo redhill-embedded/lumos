@@ -27,11 +27,31 @@ class LumosMode(IntEnum):
     STREAMING = 1,
     MANUAL = 2
 
-class LumosPattern(IntEnum):
-    RED     = 0,
-    GREEN   = 1,
-    BLUE    = 2,
-    WHITE   = 3,
+LumosColor = {
+    "white":    (255, 255, 255),
+    "red":      (255, 0, 0),
+    "lime":     (0, 255, 0),
+    "blue":     (0, 0, 255),
+    "yellow":   (255, 255, 0),
+    "cyan":     (0, 255, 255),
+    "magenta":  (255, 0, 255),
+    "silver":   (192, 192, 192),
+    "gray":     (128, 128, 128),
+    "maroon":   (128, 0, 0),
+    "olive":    (128, 128, 0),
+    "green":    (0, 128, 0),
+    "purple":   (128, 0, 128),
+    "teal":     (0, 128, 128),
+    "navy":     (0, 0, 128),
+    "coral":    (255, 127, 80),
+    "orange":   (255, 165, 0),
+    "gold":     (255, 215, 0),
+    "khaki":    (240, 230, 140),
+    "turquoise":(64, 224, 208),
+    "indigo":   (75, 0, 130),
+    "violet":   (238, 130, 238),
+    "pink":     (255, 192, 203),
+}
 
 
 class LumosInterface():
@@ -94,10 +114,6 @@ class LumosInterface():
         data = struct.pack("<B", brightness)
         self.interface.controlWrite(request=LumosOpcode.BRIGHTNESS, data=data)
 
-    def set_pattern(self, pattern: LumosPattern):
-        data = struct.pack("<B", pattern)
-        self.interface.controlWrite(request=LumosOpcode.PATTERN, data=data)
-
     def set_all(self, red: int, green: int, blue: int):
         data = struct.pack("<BBB", red, green, blue)
         self.interface.controlWrite(request=LumosOpcode.SET_ALL, data=data)
@@ -119,9 +135,6 @@ class Lumos():
 
     def brightness(self, brightness):
         self.interface.set_brightness(brightness)
-
-    def pattern(self, pattern):
-        self.interface.set_pattern(pattern)
 
     def num_leds(self, num_leds):
         self.interface.set_num_leds(num_leds)

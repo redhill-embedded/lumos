@@ -1,4 +1,4 @@
-from lumos.lumos import Lumos, LumosPattern
+from lumos.lumos import Lumos
 from lumos.generator import LumosBitmapGenerator
 
 import time

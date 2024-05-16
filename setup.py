@@ -19,7 +19,7 @@ setup(
         ]
     },
     python_requires=">=3.8",
-    install_requires=["recom"],
+    install_requires=["recom=0.0.2"],
     entry_points={
         "console_scripts": [
             "lumos=lumos.__main__:main",
