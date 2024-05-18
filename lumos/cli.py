@@ -1,6 +1,7 @@
 import argparse
 import os
 import shutil
+import platform
 
 from time import sleep
 
@@ -8,7 +9,9 @@ import lumos
 from lumos.lumos import Lumos, LumosPowerState, LumosMode, LumosColor
 from recom import RecomDevice, RecomDeviceException
 from recom.backend.usb import get_vid_pid_on_port
-from recom.util import get_drive_mount_point_from_usb_port_path
+
+if platform.system() != 'Windows':
+    from recom.util import get_drive_mount_point_from_usb_port_path
 
 
 def print_info():
@@ -105,29 +108,33 @@ def update_fw(arg):
                 break
         sleep(0.1)
 
-    print("Looking for mass storage device... ", end='')
-    for i in range(10):
-        mp = get_drive_mount_point_from_usb_port_path(port_path, new_vp)
-        if mp is not None:
-            break
-        sleep(1)
-    if mp == None:
-        print("\nERROR: Bootloader not found")
-        return False
+    if platform.system() != 'Windows':
+        print("Looking for mass storage device... ", end='')
+        for i in range(10):
+            mp = get_drive_mount_point_from_usb_port_path(port_path, new_vp)
+            if mp is not None:
+                break
+            sleep(1)
+        if mp == None:
+            print("\nERROR: Bootloader not found")
+            return False
+        else:
+            print(mp)
+        print(f"Updating device with {binary_file}")
+        if not os.path.exists(mp):
+            print(f"ERROR: Bootloader path does not exist ({mp})")
+            return False
+        dest_ref = os.path.join(mp, binary_file)
+        try:
+            shutil.copy(file_ref, dest_ref)
+        except IOError as exp:
+            print(f"ERROR: Failed to copy file {binary_file} ({exp})")
+            return False
+        print("DONE")
+        return True
     else:
-        print(mp)
-    print(f"Updating device with {binary_file}")
-    if not os.path.exists(mp):
-        print(f"ERROR: Bootloader path does not exist ({mp})")
-        return False
-    dest_ref = os.path.join(mp, binary_file)
-    try:
-        shutil.copy(file_ref, dest_ref)
-    except IOError as exp:
-        print(f"ERROR: Failed to copy file {binary_file} ({exp})")
-        return False
-    print("DONE")
-    return True
+        print(f"Please manually copy {binary_file} to the flash driver that just showd up!")
+        return True
 
 
 def cli(argv):
