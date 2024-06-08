@@ -142,6 +142,9 @@ class Lumos():
     def color(self, red: int, green: int, blue: int):
         self.set_all(red, green, blue)
 
+    def color(self, color: str):
+        self.set_all(*LumosColor[color.lower()])
+
     def set_all(self, red: int, green: int, blue: int):
         self.interface.set_all(red, green, blue)
 
